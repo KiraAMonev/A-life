@@ -4,6 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 
+.vs/P
+P/
+x64/Debug
+*.vs
 *.dll
 *.sln
 *.vcxproj
