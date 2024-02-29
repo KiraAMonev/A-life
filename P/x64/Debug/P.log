@@ -1,0 +1,7 @@
+﻿  grass.cpp
+  main.cpp
+Z:\c++\P\P\main.cpp(20,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+Z:\c++\P\P\main.cpp(88,55): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+Z:\c++\P\P\main.cpp(88,40): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  Создание кода...
+  P.vcxproj -> Z:\c++\P\x64\Debug\P.exe
