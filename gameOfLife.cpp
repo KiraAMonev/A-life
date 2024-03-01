@@ -44,12 +44,17 @@ void GameOfLife::update() {
                 grassCells[x][y].decreaseLifeSpan(); // Уменьшаем продолжительность жизни травы
                 if (!grassCells[x][y].isAlive()) { // Если трава умерла
                     cells[x][y] = false; // Удаляем траву из ячейки
-                    int new_x = x + (rand() % 5 - 2);
-                    int new_y = y + (rand() % 5 - 2);
-                    if (new_x < GRID_SIZE && new_x > 0 && new_y > 0 && new_y < GRID_SIZE && cells[new_x][new_y] == false) {
-                        cells[new_x][new_y] = true;
-                        grassCells[new_x][new_y].setLifeSpan(GRASS_LIFE_SPAN);
+                    int cnt_baby = rand()%10;//всего 24 соседа, пусть трава может сделать макс 10 детей
+                    for (int i = 0; i < cnt_baby; i++)
+                    {
+                        int new_x = x + (rand() % 5 - 2);
+                        int new_y = y + (rand() % 5 - 2);
+                        if (new_x < GRID_SIZE && new_x > 0 && new_y > 0 && new_y < GRID_SIZE && cells[new_x][new_y] == false) {
+                            cells[new_x][new_y] = true;
+                            grassCells[new_x][new_y].setLifeSpan(GRASS_LIFE_SPAN);
+                        }
                     }
+                    
                 }
             }
         }
