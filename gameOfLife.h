@@ -12,9 +12,9 @@ const int WINDOW_WIDTH = 800; // Ширина игрового окна
 const int WINDOW_HEIGHT = 800; // Высота игрового окна
 const int CELL_SIZE = 8; // Размер каждой ячейки в сетке
 const int GRID_SIZE = WINDOW_WIDTH / CELL_SIZE; // Размер сетки на основе ширины окна и размера ячейки
-const int NUM_GRASS = 100; // Количество травы, которая будет размещена в начале
+const int NUM_GRASS = 300; // Количество травы, которая будет размещена в начале
 const int GRASS_LIFE_SPAN = 5; // Продолжительность жизни травы в циклах
-
+const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 class GameOfLife {
 public:
     GameOfLife();
