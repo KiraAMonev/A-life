@@ -2,9 +2,11 @@
 
 GameOfLife::GameOfLife() {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML Game of Life"); // —оздание SFML окна
-    cells.resize(GRID_SIZE, std::vector<bool>(GRID_SIZE, false)); // »зменение размера сетки €чеек
+    cells.resize(GRID_SIZE, std::vector<int>(GRID_SIZE, 0)); // »зменение размера сетки €чеек
     srand(time(nullptr)); // »нициализаци€ генератора случайных чисел
-    placeGrass(); // –азмещение начальной травы
+
+    //placeGrass(); // –азмещение начальной травы
+    placeHerbivores();
     placeText(font, text);
 }
 
@@ -30,29 +32,89 @@ void GameOfLife::placeGrass() {
     for (int i = 0; i < NUM_GRASS; ++i) { // ÷икл дл€ размещени€ травы
         int x = rand() % GRID_SIZE; // —лучайное значение x
         int y = rand() % GRID_SIZE; // —лучайное значение y
-        cells[x][y] = true; // ”становка €чейки дл€ содержани€ травы
+        cells[x][y] = 1; // ”становка €чейки дл€ содержани€ травы
         grassCells[x][y].setLifeSpan(GRASS_LIFE_SPAN); // ”становка продолжительности жизни дл€ травы
     }
 }
 
+void GameOfLife::placeHerbivores() {
+    herbivoreCells.resize(GRID_SIZE, std::vector<Herbivore>(GRID_SIZE)); //изменение размера сетки траво€дных
+    for (int i = 0; i < NUM_HERBIVORE; ++i) { //цикл начального размещени€ траво€дных
+        int x = rand() % GRID_SIZE;
+        int y = rand() % GRID_SIZE;
+        if (cells[x][y] == 0) { //если в клетке ничего нет, то занимаем еЄ траво€дным
+            cells[x][y] = 2; //ставим флаг, что она зан€та траво€дным
+            createHerbivore(x, y);
+        }
+        else { 
+            while (cells[x][y] == 1 || cells[x][y] == 3) { // пока в клетке есть что то, кроме траво€дного, ищем новую клетку дл€ размещени€
+                x = rand() % GRID_SIZE;
+                y = rand() % GRID_SIZE;
+                if (cells[x][y] == 0) {
+                    cells[x][y] = 2; //ставим флаг, что она зан€та траво€дным
+                    createHerbivore(x, y);
+                }
+            }
+        }
+    }
+}
+
+
+
+void GameOfLife::createHerbivore(int x, int y) {
+    herbivoreCells[x][y].setLifeSpan(HERBIVORES_LIFE_SPAN); //”становка жизни траво€дного
+    herbivoreCells[x][y].setSatiety(NORMAL_SATIETY); //”становка сытости траво€дного
+    herbivoreCells[x][y].setSex(); //установка пола
+}
+
+void GameOfLife::reproductionHerbivores(int x, int y) {
+    if (cells[x][y] == 2 && herbivoreCells[x][y].getLifeSpan() <= ADULT_AGE_HERBIVORE) {
+        int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
+        int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
+        for (int i = 0; i < 8; i++){
+            int n_x = x + dx[i];
+            int n_y = y + dy[i];
+            if (n_x > 0 && n_x < GRID_SIZE && n_y > 0 && n_y < GRID_SIZE) {
+                if (cells[n_x][n_y] == 2 && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].getLifeSpan() <= ADULT_AGE_HERBIVORE) {
+                    int birth_x = x + (rand() % 5 - 2);
+                    int birth_y = y + (rand() % 5 - 2);
+                    createHerbivore(birth_x, birth_y);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 void GameOfLife::update() {
     for (int x = 0; x < GRID_SIZE; ++x) { // ÷икл по €чейкам сетки
         for (int y = 0; y < GRID_SIZE; ++y) {
-            if (cells[x][y]) { // ≈сли €чейка содержит что то (сейчас это пока что трава)
+            if (cells[x][y] == 1) { // ≈сли €чейка содержит что то (сейчас это пока что трава)
                 grassCells[x][y].decreaseLifeSpan(); // ”меньшаем продолжительность жизни травы
                 if (!grassCells[x][y].isAlive()) { // ≈сли трава умерла
-                    cells[x][y] = false; // ”дал€ем траву из €чейки
+                    cells[x][y] = 0; // ”дал€ем траву из €чейки
                     int cnt_baby = rand()%10;//всего 24 соседа, пусть трава может сделать макс 10 детей
                     for (int i = 0; i < cnt_baby; i++)
                     {
                         int new_x = x + (rand() % 5 - 2);
                         int new_y = y + (rand() % 5 - 2);
-                        if (new_x < GRID_SIZE && new_x > 0 && new_y > 0 && new_y < GRID_SIZE && cells[new_x][new_y] == false) {
-                            cells[new_x][new_y] = true;
+                        if (new_x < GRID_SIZE && new_x > 0 && new_y > 0 && new_y < GRID_SIZE && cells[new_x][new_y] == 0) {
+                            cells[new_x][new_y] = 1;
                             grassCells[new_x][new_y].setLifeSpan(GRASS_LIFE_SPAN);
                         }
                     }
                     
+                }
+            }
+            else if (cells[x][y] == 2) {
+                herbivoreCells[x][y].decreaseLifeSpan();
+                herbivoreCells[x][y].decreaseSatiety();
+                if (herbivoreCells[x][y].isAlive() == false) {
+                    cells[x][y] = 0;
+                }
+                else {
+                    reproductionHerbivores(x, y);
                 }
             }
         }
@@ -71,10 +133,13 @@ void GameOfLife::render() {
     window.clear(sf::Color::White); // ќчистка окна белым цветом
     for (int x = 0; x < GRID_SIZE; ++x) { // ÷икл по €чейкам сетки
         for (int y = 0; y < GRID_SIZE; ++y) {
-            if (cells[x][y]) { // ≈сли €чейка содержит траву
+            if (cells[x][y] == 1 || cells[x][y] == 2 || cells[x][y] == 3) { // ≈сли €чейка содержит что то
                 sf::RectangleShape cell(sf::Vector2f(CELL_SIZE, CELL_SIZE)); // —оздаем пр€моугольник дл€ €чейки
                 cell.setPosition(x * CELL_SIZE, y * CELL_SIZE); // ѕозиционируем €чейку
-                cell.setFillColor(sf::Color::Green); // ”станавливаем цвет травы
+                if(cells[x][y] == 1)
+                    cell.setFillColor(sf::Color::Green); // ”станавливаем цвет травы
+                else if(cells[x][y] == 2)
+                    cell.setFillColor(sf::Color::Yellow); // ”станавливаем цвет траво€дных
                 window.draw(cell); // –исуем €чейку с травой
             }
         }
