@@ -16,10 +16,10 @@ const int NUM_GRASS = 300; // Количество травы, которая будет размещена в начале
 const int GRASS_LIFE_SPAN = 5; // Продолжительность жизни травы в циклах
 const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 
-const int NUM_HERBIVORE = 100;
-const int HERBIVORES_LIFE_SPAN = 7;
-const int NORMAL_SATIETY = 7;
-const int ADULT_AGE_HERBIVORE = 3;
+const int NUM_HERBIVORE = 200; //количество травоядных
+const int HERBIVORES_LIFE_SPAN = 7; //продолжительность жизни травоядных
+const int NORMAL_SATIETY = 7; //нормальное количество сытости
+const int ADULT_AGE_HERBIVORE = 3; //"зрелость", то есть возраст, когда можно шпили-вили
 
 
 class GameOfLife {

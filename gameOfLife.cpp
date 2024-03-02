@@ -5,8 +5,8 @@ GameOfLife::GameOfLife() {
     cells.resize(GRID_SIZE, std::vector<int>(GRID_SIZE, 0)); // Изменение размера сетки ячеек
     srand(time(nullptr)); // Инициализация генератора случайных чисел
 
-    //placeGrass(); // Размещение начальной травы
-    placeHerbivores();
+    placeGrass(); // Размещение начальной травы
+    placeHerbivores(); //размещение начальных травоядных
     placeText(font, text);
 }
 
@@ -67,7 +67,7 @@ void GameOfLife::createHerbivore(int x, int y) {
     herbivoreCells[x][y].setSex(); //установка пола
 }
 
-void GameOfLife::reproductionHerbivores(int x, int y) {
+void GameOfLife::reproductionHerbivores(int x, int y) { //малое расстояние до особи вокруг, чтобы травоядные шпили-вили
     if (cells[x][y] == 2 && herbivoreCells[x][y].getLifeSpan() <= ADULT_AGE_HERBIVORE) {
         int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
         int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
@@ -113,7 +113,7 @@ void GameOfLife::update() {
                 if (herbivoreCells[x][y].isAlive() == false) {
                     cells[x][y] = 0;
                 }
-                else {
+                else { //если животное живо, то оно размножается (и пока что стоит на месте)
                     reproductionHerbivores(x, y);
                 }
             }
