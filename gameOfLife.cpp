@@ -5,9 +5,7 @@ GameOfLife::GameOfLife() {
     cells.resize(GRID_SIZE, std::vector<bool>(GRID_SIZE, false)); // Изменение размера сетки ячеек
     srand(time(nullptr)); // Инициализация генератора случайных чисел
     placeGrass(); // Размещение начальной травы
-    text.setFillColor(sf::Color::Black); // Установка цвета текста
-    text.setStyle(sf::Text::Bold); // Делаем текст жирным
-    text.setPosition((WINDOW_WIDTH - text.getLocalBounds().width) / 2, (WINDOW_HEIGHT - text.getLocalBounds().height) / 2); // Позиционирование текста
+    placeText(font, text);
 }
 
 void GameOfLife::run() {
@@ -85,7 +83,17 @@ void GameOfLife::render() {
     window.display(); // Отображаем отрисованный кадр
 }
 
+void GameOfLife::placeText(sf::Font& font, sf::Text& text) {
+    font.loadFromFile("Font/arial.ttf");
+    text.setFont(font);
+    text.setFillColor(sf::Color::Black); // Установка цвета текста
+    text.setCharacterSize(35);
+    text.setPosition(50, 30);
+    //text.setPosition((WINDOW_WIDTH - text.getLocalBounds().width) / 2, (WINDOW_HEIGHT - text.getLocalBounds().height) / 2); // Позиционирование текста
+}
+
 void GameOfLife::updateText(int cycleCount) {
     text.setString(std::to_string(cycleCount)); // Устанавливаем текст для отображения количества циклов
-    text.setPosition((WINDOW_WIDTH - text.getLocalBounds().width) / 2, (WINDOW_HEIGHT - text.getLocalBounds().height) / 2); // Центрируем текст
+    text.setPosition(50, 30);
+    //text.setPosition((WINDOW_WIDTH - text.getLocalBounds().width) / 2, (WINDOW_HEIGHT - text.getLocalBounds().height) / 2); // Центрируем текст
 }

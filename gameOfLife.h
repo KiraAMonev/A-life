@@ -31,6 +31,7 @@ private:
     void update();
     void processEvents();
     void render();
+    void placeText(sf::Font& font, sf::Text& text);
     void updateText(int cycleCount);
 };
 
