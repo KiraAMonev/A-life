@@ -42,19 +42,10 @@ void GameOfLife::placeHerbivores() {
     for (int i = 0; i < NUM_HERBIVORE; ++i) { //цикл начального размещения травоядных
         int x = rand() % GRID_SIZE;
         int y = rand() % GRID_SIZE;
-        if (cells[x][y] == 0) { //если в клетке ничего нет, то занимаем её травоядным
-            cells[x][y] = 2; //ставим флаг, что она занята травоядным
+        if (cells[x][y] == NOT_FILL || cells[x][y] == IS_GRASS) { //если в клетке ничего нет, то занимаем её травоядным
+            grassCells[x][y].setLifeSpan(0);
+            cells[x][y] = IS_HERBIVORE; //ставим флаг, что она занята травоядным
             createHerbivore(x, y);
-        }
-        else { 
-            while (cells[x][y] == 1 || cells[x][y] == 3) { // пока в клетке есть что то, кроме травоядного, ищем новую клетку для размещения
-                x = rand() % GRID_SIZE;
-                y = rand() % GRID_SIZE;
-                if (cells[x][y] == 0) {
-                    cells[x][y] = 2; //ставим флаг, что она занята травоядным
-                    createHerbivore(x, y);
-                }
-            }
         }
     }
 }
@@ -68,14 +59,13 @@ void GameOfLife::createHerbivore(int x, int y) {
 }
 
 void GameOfLife::reproductionHerbivores(int x, int y) { //малое расстояние до особи вокруг, чтобы травоядные шпили-вили
-    if (cells[x][y] == 2 && herbivoreCells[x][y].getLifeSpan() <= ADULT_AGE_HERBIVORE) {
         int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
         int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
         for (int i = 0; i < 8; i++){
             int n_x = x + dx[i];
             int n_y = y + dy[i];
             if (n_x > 0 && n_x < GRID_SIZE && n_y > 0 && n_y < GRID_SIZE) {
-                if (cells[n_x][n_y] == 2 && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].getLifeSpan() <= ADULT_AGE_HERBIVORE) {
+                if (cells[n_x][n_y] == IS_HERBIVORE && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].possibilityOfReproduction()) {
                     int birth_x = x + (rand() % 5 - 2);
                     int birth_y = y + (rand() % 5 - 2);
                     createHerbivore(birth_x, birth_y);
@@ -83,7 +73,6 @@ void GameOfLife::reproductionHerbivores(int x, int y) { //малое расстояние до ос
                 }
             }
         }
-    }
 }
 
 
