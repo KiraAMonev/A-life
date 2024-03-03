@@ -12,12 +12,17 @@ const int WINDOW_WIDTH = 800; // Ўирина игрового окна
 const int WINDOW_HEIGHT = 800; // ¬ысота игрового окна
 const int CELL_SIZE = 8; // –азмер каждой €чейки в сетке
 const int GRID_SIZE = WINDOW_WIDTH / CELL_SIZE; // –азмер сетки на основе ширины окна и размера €чейки
+
+const int IS_GRASS = 1;
+const int IS_HERBIVORE = 2;
+const int IS_PREDATOR = 3;
+
 const int NUM_GRASS = 300; //  оличество травы, котора€ будет размещена в начале
 const int GRASS_LIFE_SPAN = 5; // ѕродолжительность жизни травы в циклах
 const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 
 const int NUM_HERBIVORE = 200; //количество траво€дных
-const int HERBIVORES_LIFE_SPAN = 7; //продолжительность жизни траво€дных
+const int HERBIVORES_LIFE_SPAN = 10; //продолжительность жизни траво€дных
 const int NORMAL_SATIETY = 7; //нормальное количество сытости
 const int ADULT_AGE_HERBIVORE = 3; //"зрелость", то есть возраст, когда можно шпили-вили
 

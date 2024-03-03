@@ -90,7 +90,7 @@ void GameOfLife::reproductionHerbivores(int x, int y) { //малое рассто€ние до ос
 void GameOfLife::update() {
     for (int x = 0; x < GRID_SIZE; ++x) { // ÷икл по €чейкам сетки
         for (int y = 0; y < GRID_SIZE; ++y) {
-            if (cells[x][y] == 1) { // ≈сли €чейка содержит что то (сейчас это пока что трава)
+            if (cells[x][y] == IS_GRASS) { 
                 grassCells[x][y].decreaseLifeSpan(); // ”меньшаем продолжительность жизни травы
                 if (!grassCells[x][y].isAlive()) { // ≈сли трава умерла
                     cells[x][y] = 0; // ”дал€ем траву из €чейки
@@ -107,7 +107,7 @@ void GameOfLife::update() {
                     
                 }
             }
-            else if (cells[x][y] == 2) {
+            else if (cells[x][y] == IS_HERBIVORE) {
                 herbivoreCells[x][y].decreaseLifeSpan();
                 herbivoreCells[x][y].decreaseSatiety();
                 if (herbivoreCells[x][y].isAlive() == false) {
