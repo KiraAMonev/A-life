@@ -42,6 +42,7 @@ bool Herbivore::isAlive() const { //проверка на жизнь
 
 bool Herbivore::possibilityOfReproduction() const
 {
-	if (lifeSpan >= ADULT_AGE_HERBIVORE)
+	if (lifeSpan <=  ADULT_AGE_HERBIVORE)
 		return true;
+	return false;
 }
