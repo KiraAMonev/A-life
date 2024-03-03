@@ -58,21 +58,24 @@ void GameOfLife::createHerbivore(int x, int y) {
     herbivoreCells[x][y].setSex(); //установка пола
 }
 
-void GameOfLife::reproductionHerbivores(int x, int y) { //малое расстояние до особи вокруг, чтобы травоядные шпили-вили
-        int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
-        int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
-        for (int i = 0; i < 8; i++){
-            int n_x = x + dx[i];
-            int n_y = y + dy[i];
-            if (n_x > 0 && n_x < GRID_SIZE && n_y > 0 && n_y < GRID_SIZE) {
-                if (cells[n_x][n_y] == IS_HERBIVORE && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].possibilityOfReproduction()) {
+void GameOfLife::reproductionHerbivores(int x, int y) {
+    int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
+    int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
+
+    int cnt_baby = rand() % 4;
+    for (int i = 0; i < 8; i++) {
+        int n_x = x + dx[i];
+        int n_y = y + dy[i];
+        if (n_x > 0 && n_x < GRID_SIZE && n_y > 0 && n_y < GRID_SIZE) {
+            if (cells[n_x][n_y] == IS_HERBIVORE && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].possibilityOfReproduction()) {
+                for (int j = 0; j < cnt_baby; j++) {
                     int birth_x = x + (rand() % 5 - 2);
                     int birth_y = y + (rand() % 5 - 2);
                     createHerbivore(birth_x, birth_y);
-                    break;
                 }
             }
         }
+    }
 }
 
 
@@ -102,7 +105,7 @@ void GameOfLife::update() {
                 if (!herbivoreCells[x][y].isAlive()) {
                     cells[x][y] = NOT_FILL;
                 }
-                else if(herbivoreCells[x][y].possibilityOfReproduction()) { //если животное живо, то оно размножается (и пока что стоит на месте)
+                else if(herbivoreCells[x][y].possibilityOfReproduction()) { //если достиг зрелости размножаться
                     reproductionHerbivores(x, y);
                 }
             }
