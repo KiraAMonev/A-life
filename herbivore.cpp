@@ -1,6 +1,6 @@
 #include "herbivore.h"
-
-Herbivore::Herbivore() : lifeSpan(0), satiety(0), sex(0), repPossibility(false) {};
+#include "gameOfLife.h"
+Herbivore::Herbivore() : lifeSpan(0), satiety(0), sex(0) {};
 void Herbivore::setLifeSpan(int lifeSpan) { //установка продолжительности жизни
 	this->lifeSpan = lifeSpan;
 }
@@ -38,4 +38,10 @@ bool Herbivore::isAlive() const { //проверка на жизнь
 		return true;
 	else
 		return false;
+}
+
+bool Herbivore::possibilityOfReproduction() const
+{
+	if (lifeSpan >= ADULT_AGE_HERBIVORE)
+		return true;
 }

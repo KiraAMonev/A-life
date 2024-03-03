@@ -110,10 +110,10 @@ void GameOfLife::update() {
             else if (cells[x][y] == IS_HERBIVORE) {
                 herbivoreCells[x][y].decreaseLifeSpan();
                 herbivoreCells[x][y].decreaseSatiety();
-                if (herbivoreCells[x][y].isAlive() == false) {
-                    cells[x][y] = 0;
+                if (!herbivoreCells[x][y].isAlive()) {
+                    cells[x][y] = NOT_FILL;
                 }
-                else { //если животное живо, то оно размножаетс€ (и пока что стоит на месте)
+                else if(herbivoreCells[x][y].possibilityOfReproduction()) { //если животное живо, то оно размножаетс€ (и пока что стоит на месте)
                     reproductionHerbivores(x, y);
                 }
             }
@@ -130,16 +130,16 @@ void GameOfLife::processEvents() {
 }
 
 void GameOfLife::render() {
-    window.clear(sf::Color::White); // ќчистка окна белым цветом
+    window.clear(sf::Color(240, 255, 240)); // ќчистка окна бледно-зеленым цветом
     for (int x = 0; x < GRID_SIZE; ++x) { // ÷икл по €чейкам сетки
         for (int y = 0; y < GRID_SIZE; ++y) {
             if (cells[x][y] == 1 || cells[x][y] == 2 || cells[x][y] == 3) { // ≈сли €чейка содержит что то
                 sf::RectangleShape cell(sf::Vector2f(CELL_SIZE, CELL_SIZE)); // —оздаем пр€моугольник дл€ €чейки
                 cell.setPosition(x * CELL_SIZE, y * CELL_SIZE); // ѕозиционируем €чейку
                 if(cells[x][y] == 1)
-                    cell.setFillColor(sf::Color::Green); // ”станавливаем цвет травы
+                    cell.setFillColor(sf::Color(34, 139, 34)); // ”станавливаем цвет травы
                 else if(cells[x][y] == 2)
-                    cell.setFillColor(sf::Color::Yellow); // ”станавливаем цвет траво€дных
+                    cell.setFillColor(sf::Color(160, 82, 45)); // ”станавливаем цвет траво€дных
                 window.draw(cell); // –исуем €чейку с травой
             }
         }

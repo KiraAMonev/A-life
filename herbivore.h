@@ -17,12 +17,11 @@ public:
 	void setSex();
 	int getSex() const;
 	bool isAlive() const;
-
+	bool possibilityOfReproduction()const;
 private:
 	int lifeSpan;
 	int satiety;
 	int sex;
-	bool repPossibility;
 };
 
 #endif // !HERBIVORE_H

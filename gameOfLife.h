@@ -13,6 +13,7 @@ const int WINDOW_HEIGHT = 800; // Высота игрового окна
 const int CELL_SIZE = 8; // Размер каждой ячейки в сетке
 const int GRID_SIZE = WINDOW_WIDTH / CELL_SIZE; // Размер сетки на основе ширины окна и размера ячейки
 
+const int NOT_FILL = 0;
 const int IS_GRASS = 1;
 const int IS_HERBIVORE = 2;
 const int IS_PREDATOR = 3;
