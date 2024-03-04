@@ -57,6 +57,7 @@ void GameOfLife::createHerbivore(int x, int y) {
 }
 
 void GameOfLife::reproductionHerbivores(int x, int y) {
+    int cnt_baby = rand() % 6;
     int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
     int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
     for (int i = 0; i < 8; i++) {
@@ -64,13 +65,16 @@ void GameOfLife::reproductionHerbivores(int x, int y) {
         int n_y = y + dy[i];
         if (n_x >= 0 && n_x < GRID_SIZE && n_y >= 0 && n_y < GRID_SIZE) {
             if (cells[n_x][n_y] == IS_HERBIVORE && herbivoreCells[n_x][n_y].getSex() != herbivoreCells[x][y].getSex() && herbivoreCells[n_x][n_y].possibilityOfReproduction()) {
-                int birth_x = x + (rand() % 5 - 2);
-                int birth_y = y + (rand() % 5 - 2);
-                if (birth_x >= 0 && birth_x < GRID_SIZE && birth_y >= 0 && birth_y < GRID_SIZE && cells[birth_x][birth_y] == NOT_FILL) {
-                    cells[birth_x][birth_y] = IS_HERBIVORE;
-                    createHerbivore(birth_x, birth_y);
-                    break; // Прерываем цикл после успешного размножения
+                for (int j = 0; j < cnt_baby; j++)
+                {
+                    int birth_x = x + (rand() % 5 - 2);
+                    int birth_y = y + (rand() % 5 - 2);
+                    if (birth_x >= 0 && birth_x < GRID_SIZE && birth_y >= 0 && birth_y < GRID_SIZE && (cells[birth_x][birth_y] == NOT_FILL || cells[birth_x][birth_y] == IS_GRASS)) {
+                        cells[birth_x][birth_y] = IS_HERBIVORE;
+                        createHerbivore(birth_x, birth_y);
+                    }
                 }
+                
             }
         }
     }
@@ -87,7 +91,7 @@ void GameOfLife::update() {
                     for (int i = 0; i < 10; ++i) {
                         int new_x = x + (rand() % 5 - 2);
                         int new_y = y + (rand() % 5 - 2);
-                        if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE && cells[new_x][new_y] == NOT_FILL) {
+                        if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE && (cells[new_x][new_y] == NOT_FILL || cells[new_x][new_y] == IS_GRASS)) {
                             cells[new_x][new_y] = IS_GRASS;
                             grassCells[new_x][new_y].setLifeSpan(GRASS_LIFE_SPAN);
                         }
@@ -136,7 +140,7 @@ void GameOfLife::render() {
 }
 
 void GameOfLife::placeText(sf::Font& font, sf::Text& text) {
-    font.loadFromFile("arial.ttf");
+    font.loadFromFile("Font/arial.ttf");
     text.setFont(font);
     text.setFillColor(sf::Color::Black); // Установка цвета текста
     text.setCharacterSize(35);

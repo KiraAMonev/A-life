@@ -24,7 +24,7 @@ const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 
 const int NUM_HERBIVORE = 200; //количество травоядных
 const int HERBIVORES_LIFE_SPAN = 10; //продолжительность жизни травоядных
-const int NORMAL_SATIETY = 7; //нормальное количество сытости
+const int NORMAL_SATIETY = 10; //нормальное количество сытости
 const int ADULT_AGE_HERBIVORE = 3; //"зрелость", то есть возраст, когда можно шпили-вили
 
 

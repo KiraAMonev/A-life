@@ -27,7 +27,7 @@ void Herbivore::decreaseSatiety() { //уменьшение сытости на единицу
 }
 
 void Herbivore::setSex() { //установление пола
-	sex = rand() % 2 - 1;
+	sex = rand() % 2;
 }
 
 int Herbivore::getSex() const { //получение пола
@@ -43,6 +43,7 @@ bool Herbivore::isAlive() const { //проверка на жизнь
 
 bool Herbivore::possibilityOfReproduction() const
 {
-	if (lifeSpan >= ADULT_AGE_HERBIVORE)
+	if (lifeSpan <= ADULT_AGE_HERBIVORE)
 		return true;
+	return false;
 }
