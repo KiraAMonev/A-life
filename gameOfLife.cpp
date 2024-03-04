@@ -57,7 +57,7 @@ void GameOfLife::createHerbivore(int x, int y) {
 }
 
 void GameOfLife::reproductionHerbivore(int x, int y) {
-    int cnt_baby = rand() % 6;
+    int cnt_baby = rand() % 4;
     int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
     int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
     for (int i = 0; i < 8; i++) {
@@ -113,7 +113,7 @@ void GameOfLife::update() {
                     for (int i = 0; i < 10; ++i) {
                         int new_x = x + (rand() % 5 - 2);
                         int new_y = y + (rand() % 5 - 2);
-                        if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE && (cells[new_x][new_y] == NOT_FILL || cells[new_x][new_y] == IS_GRASS)) {
+                        if (new_x >= 0 && new_x < GRID_SIZE && new_y >= 0 && new_y < GRID_SIZE && cells[new_x][new_y] == NOT_FILL) {
                             cells[new_x][new_y] = IS_GRASS;
                             grassCells[new_x][new_y].setLifeSpan(GRASS_LIFE_SPAN);
                         }
