@@ -25,7 +25,9 @@ const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 const int NUM_HERBIVORE = 200; //количество травоядных
 const int HERBIVORES_LIFE_SPAN = 10; //продолжительность жизни травоядных
 const int NORMAL_SATIETY = 10; //нормальное количество сытости
+const int HUNGRY_SATIETY = 4; //сытость, когда нужно есть траву
 const int ADULT_AGE_HERBIVORE = 3; //"зрелость", то есть возраст, когда можно шпили-вили
+const int GRASS_RESTORING_SATIETY = 1; //сколько восстанавливает травинка
 
 
 class GameOfLife {
@@ -45,8 +47,9 @@ private:
 
     void placeGrass();
     void createHerbivore(int x, int y);
-    void placeHerbivores();
-    void reproductionHerbivores(int x, int y);
+    void placeHerbivore();
+    void reproductionHerbivore(int x, int y);
+    void eatingHerbivore(int x, int y);
     void update();
     void processEvents();
     void render();

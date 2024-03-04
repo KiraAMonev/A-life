@@ -47,3 +47,10 @@ bool Herbivore::possibilityOfReproduction() const
 		return true;
 	return false;
 }
+
+bool Herbivore::isHungry() const {
+	if (getSatiety() <= HUNGRY_SATIETY) {
+		return true;
+	}
+	return false;
+}

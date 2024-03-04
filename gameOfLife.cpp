@@ -6,7 +6,7 @@ GameOfLife::GameOfLife() {
     srand(time(nullptr)); // Инициализация генератора случайных чисел
 
     placeGrass(); // Размещение начальной травы
-    placeHerbivores(); // Размещение начальных травоядных
+    placeHerbivore(); // Размещение начальных травоядных
     placeText(font, text);
 }
 
@@ -37,7 +37,7 @@ void GameOfLife::placeGrass() {
     }
 }
 
-void GameOfLife::placeHerbivores() {
+void GameOfLife::placeHerbivore() {
     herbivoreCells.resize(GRID_SIZE, std::vector<Herbivore>(GRID_SIZE)); // Изменение размера сетки травоядных
     for (int i = 0; i < NUM_HERBIVORE; ++i) { // Цикл начального размещения травоядных
         int x = rand() % GRID_SIZE;
@@ -56,7 +56,7 @@ void GameOfLife::createHerbivore(int x, int y) {
     herbivoreCells[x][y].setSex(); // Установка пола
 }
 
-void GameOfLife::reproductionHerbivores(int x, int y) {
+void GameOfLife::reproductionHerbivore(int x, int y) {
     int cnt_baby = rand() % 6;
     int dx[] = { 0, 0, 1, -1, 1, 1, -1, -1 };
     int dy[] = { 1, -1, 0, 0, 1, -1, 1, -1 };
@@ -79,6 +79,28 @@ void GameOfLife::reproductionHerbivores(int x, int y) {
         }
     }
 }
+
+void GameOfLife::eatingHerbivore(int x, int y) { //функция, которая позволяет травоядным кушать
+    if (herbivoreCells[x][y].isHungry() == true) { // проверяет, голодно ли животное в этой клетке
+        int dx[] = { 0, 0, 1, 1, 1, -1, -1, -1 };
+        int dy[] = { 1, -1, 0, 1, -1, 0, 1, -1 };
+        for (int i = 0; i < 8; i++) {
+            int eating_x = x + dx[i];
+            int eating_y = y + dy[i];
+            if (eating_x > 0 && eating_x < GRID_SIZE && eating_y > 0 && eating_y < GRID_SIZE) {
+                if (grassCells[eating_x][eating_y].getLifeSpan() != 0) { //проверяет, есть ли вокруг травинка. Если да-съедаем её
+                    int new_satiety = herbivoreCells[x][y].getLifeSpan() + GRASS_RESTORING_SATIETY;
+                    herbivoreCells[x][y].setSatiety(new_satiety);
+                    grassCells[eating_x][eating_y].setLifeSpan(0);
+                    if (cells[eating_x][eating_y] == IS_GRASS) //если в отображаемой клетке была трава, то очищаем клетку
+                        cells[eating_x][eating_y] = 0;
+                    eatingHerbivore(x, y); //рекурсивно запустим функцию, которая будет выполняться пока животное голодно
+                }
+            }  
+        }
+    }
+}
+
 
 void GameOfLife::update() {
     for (int x = 0; x < GRID_SIZE; ++x) { // Цикл по ячейкам сетки
@@ -104,8 +126,11 @@ void GameOfLife::update() {
                 if (!herbivoreCells[x][y].isAlive()) {
                     cells[x][y] = NOT_FILL;
                 }
-                else if (herbivoreCells[x][y].possibilityOfReproduction()) {
-                    reproductionHerbivores(x, y);
+                else {
+                    if (herbivoreCells[x][y].possibilityOfReproduction()) {
+                        reproductionHerbivore(x, y);
+                    }
+                    eatingHerbivore(x, y);
                 }
             }
         }

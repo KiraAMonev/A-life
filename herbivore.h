@@ -17,6 +17,7 @@ public:
 	void setSex();
 	int getSex() const;
 	bool isAlive() const;
+	bool isHungry()	const;
 	bool possibilityOfReproduction()const;
 private:
 	int lifeSpan;
