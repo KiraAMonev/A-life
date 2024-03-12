@@ -1,7 +1,7 @@
-#include "gameOfLife.h"
+п»ї#include "gameOfLife.h"
 
 int main() {
-    GameOfLife game; // Создаем экземпляр игры
-    game.run(); // Запускаем игровой цикл
+    GameOfLife game;
+    game.run();
     return 0;
 }

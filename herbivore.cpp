@@ -27,7 +27,7 @@ void Herbivore::decreaseSatiety() { //уменьшение сытости на единицу
 }
 
 void Herbivore::setSex() { //установление пола
-	sex = rand() % 2;
+	sex = randomSex();
 }
 
 int Herbivore::getSex() const { //получение пола
@@ -35,7 +35,7 @@ int Herbivore::getSex() const { //получение пола
 }
 
 bool Herbivore::isAlive() const { //проверка на жизнь
-	if (lifeSpan > 0 && satiety > 0)
+	if (lifeSpan > 0 && lifeSpan+satiety > 0)
 		return true;
 	else
 		return false;
@@ -53,4 +53,15 @@ bool Herbivore::isHungry() const {
 		return true;
 	}
 	return false;
+}
+
+int Herbivore::randomSex() {
+	// Создание генератора случайных чисел
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(0, 1); // Равномерное распределение чисел в диапазоне [-1, 1]
+
+	// Генерация случайного числа и возвращение его
+	return dis(gen);
+
 }

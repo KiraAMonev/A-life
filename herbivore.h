@@ -4,6 +4,10 @@
 #include <iostream>
 #include <vector>
 #include "grass.h"
+#include <cstdlib> // Для использования функций rand() и srand()
+#include <ctime>   // Для использования функции time()
+
+#include <random>
 
 class Herbivore {
 public:
@@ -19,7 +23,10 @@ public:
 	bool isAlive() const;
 	bool isHungry()	const;
 	bool possibilityOfReproduction()const;
+
+
 private:
+	int randomSex();
 	int lifeSpan;
 	int satiety;
 	int sex;

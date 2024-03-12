@@ -74,7 +74,7 @@ void GameOfLife::reproductionHerbivore(int x, int y) {
                         createHerbivore(birth_x, birth_y);
                     }
                 }
-                
+
             }
         }
     }
@@ -96,7 +96,7 @@ void GameOfLife::eatingHerbivore(int x, int y) { //функция, которая позволяет тр
                         cells[eating_x][eating_y] = 0;
                     eatingHerbivore(x, y); //рекурсивно запустим функцию, которая будет выполняться пока животное голодно
                 }
-            }  
+            }
         }
     }
 }
@@ -128,10 +128,31 @@ void GameOfLife::update() {
                 }
                 else {
                     if (herbivoreCells[x][y].possibilityOfReproduction()) {
-                        reproductionHerbivore(x, y);
+                        int d_x = 0;
+                        int d_y = 0;
+                        std:: pair<int, int> d = bfs(herbivoreCells, cells, x, y, herbivoreCells[x][y].getSex(), d_x, d_y);
+                        d_x = d.first;
+                        d_y = d.second;
+                        if (d_x + x < GRID_SIZE && d_x + x>0 && d_y + y < GRID_SIZE && d_y + y>0 && cells[x + d_x][y + d_y] != IS_HERBIVORE) {
+                            cells[x + d_x][y + d_y] = IS_HERBIVORE;
+                            cells[x][y] = NOT_FILL;
+                            herbivoreCells[x + d_x][y + d_y] = herbivoreCells[x][y];
+                        } else if(cells[x + d_x][y + d_y] == IS_HERBIVORE) { 
+                            reproductionHerbivore(x, y);
+                        }
+                    }
+                    else {
+                        int d_x = randomDirection();//Здесь мы просто выбираем случайное направление для движеняи и задаем это движение через перезаписывыание в новые клетки текущего живтного
+                        int d_y = randomDirection();
+                        if (d_x + x < GRID_SIZE && d_x + x>0 && d_y + y < GRID_SIZE && d_y + y>0 && cells[x + d_x][y + d_y] != IS_HERBIVORE) {
+                            cells[x + d_x][y + d_y] = IS_HERBIVORE;
+                            cells[x][y] = NOT_FILL;
+                            herbivoreCells[x + d_x][y + d_y] = herbivoreCells[x][y];
+                        }
                     }
                     eatingHerbivore(x, y);
                 }
+                
             }
         }
     }
@@ -175,4 +196,85 @@ void GameOfLife::placeText(sf::Font& font, sf::Text& text) {
 void GameOfLife::updateText(int cycleCount) {
     text.setString(std::to_string(cycleCount)); // Устанавливаем текст для отображения количества циклов
     text.setPosition(50, 30);
+}
+int GameOfLife::randomDirection(){
+    // Создание генератора случайных чисел
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1, 1); // Равномерное распределение чисел в диапазоне [-1, 1]
+
+    // Генерация случайного числа и возвращение его
+    return dis(gen);
+
+}
+
+bool isValid(int x, int y, int rows, int cols) {
+    return x >= 0 && x < rows&& y >= 0 && y < cols;
+}
+
+// Функция для выполнения поиска в ширину
+std::pair<int, int> GameOfLife::bfs(std::vector<std::vector<Herbivore>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex,int & dir_x,int & dir_y) {
+    int rows = grid.size();
+    int cols = grid[0].size();
+
+    // Массив для отслеживания посещенных клеток
+    std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+
+    // Очередь для BFS
+    std::queue < std::pair<int,int >> q;
+
+    // Добавляем начальную клетку в очередь и отмечаем её как посещённую
+    q.push(std::make_pair(startX, startY));
+    visited[startX][startY] = true;
+
+    // Массив смещений для соседних клеток (вправо, влево, вверх, вниз)
+    int dx[] = { 1, -1, 0, 0 };
+    int dy[] = { 0, 0, 1, -1 };
+
+    // Пока очередь не пуста
+    while (!q.empty()) {
+        // Извлекаем клетку из очереди
+        std::pair<int,int> current = q.front();
+        q.pop();
+
+        // Выводим координаты текущей клетки (или делаем что-то другое)
+        //cout << "Посетили клетку: (" << current.x << ", " << current.y << ")" << endl;
+
+        // Просматриваем соседние клетки
+        for (int i = 0; i < 4; ++i) {
+            int newX = current.first + dx[i];
+            int newY = current.second + dy[i];
+
+            // Проверяем, что новая клетка находится в пределах поля и не посещалась
+            if (isValid(newX, newY, rows, cols) && !visited[newX][newY] && grid[newX][newY] == 0) {
+                // Добавляем новую клетку в очередь и отмечаем её как посещённую
+                if (grid[newX][newY] == IS_HERBIVORE) {
+                    if (herbivoreCells[newX][newY].getSex() != curSex) {
+                        if (startX - newX > 0) {
+                            dir_x = -1;
+                        }
+                        else if (startX - newX < 0) {
+                            dir_x = 1;
+                        }
+                        else {
+                            dir_x = 0;
+                        }
+                        if (startY - newY > 0) {
+                            dir_y = -1;
+                        }   
+                        else if (startY - newY < 0) {
+                            dir_y = 1;
+                        }
+                        else {
+                            dir_y = 0;
+                        }
+                        return std::make_pair(dir_x, dir_y);
+                    }
+                }
+                q.push(std::make_pair(newX, newY));
+                visited[newX][newY] = true;
+            }
+        }
+    }
+    return std::make_pair(0, 0);
 }

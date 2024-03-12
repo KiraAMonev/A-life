@@ -6,7 +6,12 @@
 #include "herbivore.h"
 #include <cstdlib>
 #include <ctime>
+#include <random>
 #include <string>
+#include <vector>
+#include <queue>
+#include <cmath>
+#include <limits>
 
 const int WINDOW_WIDTH = 800; // Ширина игрового окна
 const int WINDOW_HEIGHT = 800; // Высота игрового окна
@@ -23,10 +28,10 @@ const int GRASS_LIFE_SPAN = 5; // Продолжительность жизни травы в циклах
 const int MAX_SIZE = WINDOW_WIDTH * WINDOW_HEIGHT;
 
 const int NUM_HERBIVORE = 200; //количество травоядных
-const int HERBIVORES_LIFE_SPAN = 10; //продолжительность жизни травоядных
+const int HERBIVORES_LIFE_SPAN = 20; //продолжительность жизни травоядных
 const int NORMAL_SATIETY = 10; //нормальное количество сытости
-const int HUNGRY_SATIETY = 4; //сытость, когда нужно есть траву
-const int ADULT_AGE_HERBIVORE = 3; //"зрелость", то есть возраст, когда можно шпили-вили
+const int HUNGRY_SATIETY = 8; //сытость, когда нужно есть траву
+const int ADULT_AGE_HERBIVORE = 8; //"зрелость", то есть возраст, когда можно шпили-вили
 const int GRASS_RESTORING_SATIETY = 1; //сколько восстанавливает травинка
 
 
@@ -55,6 +60,8 @@ private:
     void render();
     void placeText(sf::Font& font, sf::Text& text);
     void updateText(int cycleCount);
+    std::pair<int, int> bfs(std::vector<std::vector<Herbivore>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex, int& dir_x, int& dir_y);
+    int randomDirection(); 
 };
 
 #endif // !GAMEOFLIFE_H
