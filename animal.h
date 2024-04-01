@@ -1,5 +1,5 @@
-#ifndef HERBIVORE_H
-#define HERBIVORE_H
+#ifndef ANIMAL_H
+#define ANIMAL_H
 
 #include <iostream>
 #include <vector>
@@ -9,14 +9,13 @@
 
 #include <random>
 
-class Herbivore {
+class Animal : public Grass
+{
 public:
-	Herbivore();
+	Animal();
 	void setLifeSpan(int lifeSpan);
 	void setSatiety(int satiety);
-	int getLifeSpan() const;
 	int getSatiety() const;
-	void decreaseLifeSpan();
 	void decreaseSatiety();
 	void setSex();
 	int getSex() const;
@@ -32,4 +31,4 @@ private:
 	int sex;
 };
 
-#endif // !HERBIVORE_H
+#endif // !ANIMAL_H

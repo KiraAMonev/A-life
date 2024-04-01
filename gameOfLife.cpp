@@ -17,7 +17,7 @@ void GameOfLife::run() {
     while (window.isOpen()) { // Основной игровой цикл
         elapsed += clock.restart(); // Перезапуск часов и добавление прошедшего времени
         processEvents(); // Обработка событий
-        if (elapsed.asMilliseconds() >= 1000) { // Если прошла одна секунда
+        if (elapsed.asMilliseconds() >= 700) { // Если прошла одна секунда
             update(); // Обновление состояния игры
             elapsed = sf::Time::Zero; // Сброс прошедшего времени
             ++cycleCount; // Увеличение счетчика циклов
@@ -38,7 +38,7 @@ void GameOfLife::placeGrass() {
 }
 
 void GameOfLife::placeHerbivore() {
-    herbivoreCells.resize(GRID_SIZE, std::vector<Herbivore>(GRID_SIZE)); // Изменение размера сетки травоядных
+    herbivoreCells.resize(GRID_SIZE, std::vector<Animal>(GRID_SIZE)); // Изменение размера сетки травоядных
     for (int i = 0; i < NUM_HERBIVORE; ++i) { // Цикл начального размещения травоядных
         int x = rand() % GRID_SIZE;
         int y = rand() % GRID_SIZE;
@@ -89,11 +89,11 @@ void GameOfLife::eatingHerbivore(int x, int y) { //функция, которая позволяет тр
             int eating_y = y + dy[i];
             if (eating_x > 0 && eating_x < GRID_SIZE && eating_y > 0 && eating_y < GRID_SIZE) {
                 if (grassCells[eating_x][eating_y].getLifeSpan() != 0) { //проверяет, есть ли вокруг травинка. Если да-съедаем её
-                    int new_satiety = herbivoreCells[x][y].getLifeSpan() + GRASS_RESTORING_SATIETY;
+                    int new_satiety = herbivoreCells[x][y].getSatiety() + GRASS_RESTORING_SATIETY;
                     herbivoreCells[x][y].setSatiety(new_satiety);
                     grassCells[eating_x][eating_y].setLifeSpan(0);
                     if (cells[eating_x][eating_y] == IS_GRASS) //если в отображаемой клетке была трава, то очищаем клетку
-                        cells[eating_x][eating_y] = 0;
+                        cells[eating_x][eating_y] = NOT_FILL;
                     eatingHerbivore(x, y); //рекурсивно запустим функцию, которая будет выполняться пока животное голодно
                 }
             }
@@ -213,7 +213,7 @@ bool isValid(int x, int y, int rows, int cols) {
 }
 
 // Функция для выполнения поиска в ширину
-std::pair<int, int> GameOfLife::bfs(std::vector<std::vector<Herbivore>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex,int & dir_x,int & dir_y) {
+std::pair<int, int> GameOfLife::bfs(std::vector<std::vector<Animal>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex,int & dir_x,int & dir_y) {
     int rows = grid.size();
     int cols = grid[0].size();
 

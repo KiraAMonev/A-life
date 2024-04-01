@@ -3,7 +3,7 @@
 
 #include "SFML/Graphics.hpp" // Подключаем библиотеку SFML для графики
 #include "Grass.h" // Подключаем заголовочный файл для класса Grass
-#include "herbivore.h"
+#include "animal.h"
 #include <cstdlib>
 #include <ctime>
 #include <random>
@@ -15,7 +15,7 @@
 
 const int WINDOW_WIDTH = 800; // Ширина игрового окна
 const int WINDOW_HEIGHT = 800; // Высота игрового окна
-const int CELL_SIZE = 8; // Размер каждой ячейки в сетке
+const int CELL_SIZE = 12; // Размер каждой ячейки в сетке
 const int GRID_SIZE = WINDOW_WIDTH / CELL_SIZE; // Размер сетки на основе ширины окна и размера ячейки
 
 const int NOT_FILL = 0;
@@ -46,7 +46,7 @@ private:
     //0-пусто 1-трава 2-травоядное 3-хищник
 
     std::vector<std::vector<Grass>> grassCells; // Сетка ячеек, представляющая траву с продолжительностью жизни
-    std::vector<std::vector<Herbivore>> herbivoreCells;
+    std::vector<std::vector<Animal>> herbivoreCells;
     sf::Font font; // Шрифт для текста
     sf::Text text; // Текст для отображения счетчика циклов
 
@@ -60,7 +60,7 @@ private:
     void render();
     void placeText(sf::Font& font, sf::Text& text);
     void updateText(int cycleCount);
-    std::pair<int, int> bfs(std::vector<std::vector<Herbivore>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex, int& dir_x, int& dir_y);
+    std::pair<int, int> bfs(std::vector<std::vector<Animal>> herbivoreCells, std::vector<std::vector<int>> grid, int startX, int startY, int curSex, int& dir_x, int& dir_y);
     int randomDirection(); 
 };
 
